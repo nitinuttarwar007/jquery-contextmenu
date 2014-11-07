@@ -1,0 +1,29 @@
+{
+  "name": "bootstrap-contextmenu",
+  "version": "0.5.0",
+  "authors": [
+    "Vivek Kumar Bansal <contact@vkbansal.me>"
+  ],
+  "description": "Context-Menu for bootstrap",
+  "main": "contextmenu.js, contextmenu.min.js",
+  "moduleType": [
+    "amd",
+    "globals",
+    "node"
+  ],
+  "keywords": [
+    "contextmenu",
+    "bootstrap",
+    "menu",
+    "right",
+    "click"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
