@@ -1,21 +1,24 @@
 var gulp = require('gulp'),
-    coffee = require('gulp-coffee'),
-    uglify = require('gulp-uglify'),
-    notify = require('gulp-notify'),
-    rename = require('gulp-rename');
+    pack = require('path').join(process.cwd(), 'package.json'),
+    $ = require('gulp-load-plugins')({
+        pattern : 'gulp-*',
+        config: pack,
+        scope: ['devDependencies'],
+        replaceString: 'gulp-',
+        camelize: true,
+        lazy: true
+    });
 
 gulp.task('compile', function(){
     return gulp.src('./src/*.coffee')
-               .pipe(coffee({bare: true}))
-	       .on('error', function(error){
-	           notify.onError(error.message).apply(this);
-		   this.emit('end');
-	       })
+           .pipe($.coffeelint())
+           .pipe($.coffeelint.reporter())
+           .pipe($.coffee({bare: true}))
+           .on('error', $.util.log)
 	       .pipe(gulp.dest('./'))
-	       .pipe(uglify())
-	       .pipe(rename({suffix: '.min'}))
-	       .pipe(gulp.dest('./'))
-	       .pipe(notify("Compiled  <%= file.relative %>"));
+	       .pipe($.uglify())
+	       .pipe($.rename({suffix: '.min'}))
+	       .pipe(gulp.dest('./'));
 });
 
 gulp.task('watch', function(){

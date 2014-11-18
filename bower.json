@@ -1,10 +1,10 @@
 {
-  "name": "bootstrap-contextmenu",
+  "name": "jquery-contextmenu",
   "version": "0.5.0",
   "authors": [
     "Vivek Kumar Bansal <contact@vkbansal.me>"
   ],
-  "description": "Context-Menu for bootstrap",
+  "description": "Context-Menu for jquery",
   "main": "contextmenu.js, contextmenu.min.js",
   "moduleType": [
     "amd",

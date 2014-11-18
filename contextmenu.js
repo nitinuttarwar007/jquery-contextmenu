@@ -5,7 +5,6 @@
     factory(jQuery);
   }
 })(function($) {
-  'use strict';
   var ContextMenu, Plugin, defaults, old;
   defaults = {
     before: function() {
@@ -19,29 +18,80 @@
       FILETREE CLASS DEFINITION
    */
   ContextMenu = (function() {
-    function ContextMenu($element, options) {
-      this.$element = $element;
+    function ContextMenu(element, options) {
+      this.element = element;
       this.settings = $.extend({}, defaults, options);
       if (options.target) {
-        this.$element.data('target', options.target);
+        $(this.element).data('target', options.target);
       }
       this.init();
     }
 
-    ContextMenu.prototype.init = function() {};
+    ContextMenu.prototype.init = function() {
+      $(this.element).on('contextmenu.menu.context', this.show.bind(this));
+      $('html, body').on('click.menu.context', this.hide.bind(this));
+    };
 
-    ContextMenu.prototype.show = function() {};
+    ContextMenu.prototype.destroy = function() {
+      $(this.element).off('.menu.context').data('$.contextmenu', null);
+      $('html, body').off('.menu.context');
+    };
+
+    ContextMenu.prototype.show = function(event) {
+      var $menu, relatedTarget, targetPosition, that;
+      if (this.isDisabled()) {
+        return;
+      }
+      this.hide();
+      if (!this.settings.before.call(this, event, $(event.currentTarget))) {
+        return;
+      }
+      relatedTarget = {
+        relatedTarget: this,
+        bubbles: false
+      };
+      $menu = this.getMenu();
+      $menu.trigger($.Event('show.menu.context', relatedTarget));
+      targetPosition = this._getPosition(event, $menu);
+      that = this;
+      $menu.attr('style', '').css(targetPosition).addClass('open').one('click.menu.context', 'li:not(.divider)', function(e) {
+        $menu.trigger($.Event('click.item.context', relatedTarget), $(event.target));
+        that.hide.call(that);
+        return false;
+      }).trigger($.Event('shown.menu.context', relatedTarget));
+      $('html').on('click.menu.context', $menu.selector, this.hide.bind(this));
+      return false;
+    };
+
+    ContextMenu.prototype.hide = function() {
+      var $menu, relatedTarget;
+      $menu = this.getMenu();
+      if (!$menu.hasClass('open')) {
+        return;
+      }
+      relatedTarget = {
+        relatedTarget: this
+      };
+      $menu.trigger($.Event('hide.menu.context', relatedTarget));
+      $menu.removeClass('open').off('click.menu.context', 'li:not(.divider)').trigger($.Event('hidden.menu.context', relatedTarget));
+      $('html').off('click.menu.context', $menu.selector);
+      return false;
+    };
+
+    ContextMenu.prototype.isDisabled = function() {
+      return $(this.element).hasClass("disabled") || $(this.element).attr('disabled');
+    };
 
     ContextMenu.prototype.getMenu = function() {
       var $menu, selector;
-      selector = this.$element.data('target');
+      selector = $(this.element).data('target');
       if (!selector) {
-        selector = this.$element.attr('href');
+        selector = $(this.element).attr('href');
         selector = selector && selector.replace(/.*(?=#[^\s]*$)/, '');
       }
       $menu = $(selector);
       if (!$menu.length) {
-        $menu(this.$element.find(selector));
+        $menu = $(this.element).find(selector);
       }
       return $menu;
     };
@@ -84,7 +134,7 @@
       $this = $(this);
       data = $this.data('$.contextmenu');
       if (!data) {
-        $this.data("$.contextmenu", (data = new FileTree(this, options)));
+        $this.data("$.contextmenu", (data = new ContextMenu(this, options)));
       }
       if (typeof options === 'string' && options.substr(0, 1) !== '_') {
         retVal = data[options].call(data, obj);
