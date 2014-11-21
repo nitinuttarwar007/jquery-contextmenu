@@ -18,6 +18,9 @@
     "right",
     "click"
   ],
+  "dependencies": {
+    "jquery": "~2.1.1"
+  },
   "license": "MIT",
   "ignore": [
     "**/.*",
