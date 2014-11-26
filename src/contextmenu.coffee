@@ -117,6 +117,13 @@
             menuStyles.left = mouseX + scrollLeft
             menuStyles.left -= menuWidth if mouseX + menuWidth > limitX
 
+            parentOffset = $menu.offsetParent().offset()
+            parentScrollLeft = $menu.offsetParent().scrollLeft()
+            parentScrollTop = $menu.offsetParent().scrollTop()
+            
+            menuStyles.left -= parentOffset.left + parentScrollLeft
+            menuStyles.top -= parentOffset.top + parentScrollTop
+
             menuStyles
 
     ###

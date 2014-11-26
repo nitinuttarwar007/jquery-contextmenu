@@ -97,7 +97,7 @@
     };
 
     ContextMenu.prototype._getPosition = function(e, $menu) {
-      var limitX, limitY, menuHeight, menuStyles, menuWidth, mouseX, mouseY, scrollLeft, scrollTop;
+      var limitX, limitY, menuHeight, menuStyles, menuWidth, mouseX, mouseY, parentOffset, parentScrollLeft, parentScrollTop, scrollLeft, scrollTop;
       mouseX = e.clientX;
       mouseY = e.clientY;
       limitX = $(window).width();
@@ -118,6 +118,11 @@
       if (mouseX + menuWidth > limitX) {
         menuStyles.left -= menuWidth;
       }
+      parentOffset = $menu.offsetParent().offset();
+      parentScrollLeft = $menu.offsetParent().scrollLeft();
+      parentScrollTop = $menu.offsetParent().scrollTop();
+      menuStyles.left -= parentOffset.left + parentScrollLeft;
+      menuStyles.top -= parentOffset.top + parentScrollTop;
       return menuStyles;
     };
 
