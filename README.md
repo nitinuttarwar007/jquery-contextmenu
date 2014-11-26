@@ -38,6 +38,8 @@ Make a menu.
     </ul>
 </div>
 ```
+> Menu must be placed in a static container preferably under `body`
+
 Display it.
 ```js
 $(document).ready(function(){
