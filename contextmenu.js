@@ -54,8 +54,15 @@
       $menu.trigger($.Event('show.menu.context', relatedTarget));
       targetPosition = this._getPosition(event, $menu);
       that = this;
-      $menu.attr('style', '').css(targetPosition).addClass('open').one('click.menu.context', 'li:not(.divider)', function(e) {
-        $menu.trigger($.Event('click.item.context', relatedTarget), $(event.target));
+      $menu.attr('style', '').css(targetPosition).addClass('open').one('click.menu.context', 'li:not(.divider)', {
+        context: event.target
+      }, function(e) {
+        var data;
+        data = {
+          item: e.target,
+          context: e.data.context
+        };
+        $menu.trigger('click.item.context', [data]);
         that.hide.call(that);
         return false;
       }).trigger($.Event('shown.menu.context', relatedTarget));

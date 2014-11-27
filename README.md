@@ -93,11 +93,11 @@ A function that is called just before showing the menu. If a **falsy** value is 
 | hidden.menu.context | Just after menu is hidden       |
 | click.item.context  | An item in menu is clicked      |
 
-> **Note**: The context for these events is the menu provided in `target`
+> **Note**: The context for these events is the menu provided in `target` option while initialization
 
-The `click.item.context` event handler takes two arguments:
-- `event` : The original `click` event. The clicked item can be retrieved using `event.target`.
-- `context` : The element where the click occured.
+`click.item.context`, takes two arguments:
+- `event` : The browser's original `click` event. 
+- `data`: It's an object with two keys, `item` and `context`. `data.item` is the clicked item and `data.context` is where the right click ocurred. 
 
 ##Methods
 ###getMenu

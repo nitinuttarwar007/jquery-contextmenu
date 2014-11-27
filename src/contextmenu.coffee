@@ -50,8 +50,11 @@
             $menu.attr('style', '')
                 .css(targetPosition)
                 .addClass('open')
-                .one('click.menu.context', 'li:not(.divider)', (e)->
-                    $menu.trigger($.Event('click.item.context', relatedTarget), $(event.target))
+                .one('click.menu.context', 'li:not(.divider)', {context: event.target},(e)->
+                    data =
+                        item: e.target
+                        context : e.data.context
+                    $menu.trigger('click.item.context', [data])
                     that.hide.call(that)
                     false
                 ).trigger($.Event('shown.menu.context', relatedTarget))
