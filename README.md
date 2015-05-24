@@ -1,4 +1,4 @@
-#jQuery Context-menu
+#[This project has been Abandoned!]
 
 A context menu plugin to be used with [jQuery](http://jquery.com).
 
